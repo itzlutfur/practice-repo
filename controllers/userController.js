@@ -1,6 +1,3 @@
-const express = require('express');
-const router = express.Router();
-
 const user = [
     {id:1, name:'Tanvir'},
     {id:2, name:'Alvi'}
