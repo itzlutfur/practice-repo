@@ -1,3 +1,5 @@
+const { saveUserAgent } = require("../utils/logger");
+
 const isValid = (req, res, next) => {
   console.log("Token is: ", req.query.token);
   if (req.query.token === "123") {
@@ -10,11 +12,26 @@ const isValid = (req, res, next) => {
 const checkUserAgent = (req, res, next) => {
   const userAgent = req.headers["user-agent"];
   console.log("User-Agent: ", userAgent);
+  const blockedPatterns = [
+    /curl/i,
+    /wget/i,
+    /python-requests/i,
+    /Go-http-request/i,
+    /Java/i,
+    /sqlmap/i,
+    /nmap/i,
+    /Nikto/i,
+    /HeadlessChrome/i,
+    /PhantomJS/i,
+    /PostmanRuntime/i,
+  ];
+  const isBlocked = blockedPatterns.some((pattern) => pattern.test(userAgent));
+  saveUserAgent(userAgent);
 
-  if (!userAgent) {
-    return res.status(400).json({ message: "User-Agent header is missing" });
+  if (!userAgent || isBlocked) {
+    return res.status(403).json({ message: "Forbidden: Invalid User-Agent" });
   }
   next();
 };
 
-module.exports = {isValid, checkUserAgent};
+module.exports = { isValid, checkUserAgent };
