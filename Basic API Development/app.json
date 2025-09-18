@@ -1,9 +1,0 @@
-{
-    "name": "MyApp",
-    "displayName": "My Application",
-    "version": "1.0.0",
-    "description": "This is a sample application.",
-    "author": "Lutfur Rahman Tanvir",
-    "license": "ISC",
-    "main": "main.js"
-}
