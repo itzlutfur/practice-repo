@@ -1,0 +1,1 @@
+console.log('Setup with Node + TS');
