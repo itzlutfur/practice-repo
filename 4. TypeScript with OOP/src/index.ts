@@ -7,7 +7,7 @@ app.use(express.json());
 
 
 app.get('/', (req: Request, res: Response) => {
-  console.log(req.headers);
+  res.json(req.headers);
 });
 
 app.post('/student', (req: Request, res: Response) => {
