@@ -1,7 +1,7 @@
 class Student{
-    university: string = "DIU";
-    name: string;
-    amount: number;
+    private university: string = "DIU";
+    private name: string;
+    private amount: number;
     whatsapp: string;
     email: string;
 
@@ -16,7 +16,18 @@ class Student{
         return `University: ${this.university}, Name: ${this.name}, Amount: ${this.amount}, WhatsApp: ${this.whatsapp}, Email: ${this.email}`;
     }
 
+    addMoney(money: number): number{
+        if(money > 0){
+            this.amount += money;
+        } else {
+            console.log("Invalid amount to add.");
+        }
+        return this.amount;
+    }
+
 }
 
 const student1 = new Student("Alice", 5000, "017XXXXXXXX", "st23@gmail.com");
+console.log(student1.printDetails());
+student1.addMoney(-199);
 console.log(student1.printDetails());

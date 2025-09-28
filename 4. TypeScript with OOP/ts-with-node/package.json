@@ -50,7 +50,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "watch": "nodemon --watch \"src/**/*.ts\" --exec \"npx ts-node\" src/app.ts"
+    "watch": "nodemon --watch \"src/**/*.ts\" --exec \"npx ts-node\" src/encapsulation.ts"
   },
   "keywords": [],
   "author": "",
