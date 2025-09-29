@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-100 min-h-screen py-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+    <!-- Submission Form -->
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
       <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
         Student Submission
       </h1>
@@ -73,7 +74,85 @@
       </form>
     </div>
 
+    <!-- Data Visualization Section -->
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Submitted Data</h2>
+        <button
+          id="refreshData"
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
+        >
+          Refresh Data
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="hidden text-center py-8">
+        <div
+          class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
+        ></div>
+        <p class="mt-2 text-gray-600">Loading data...</p>
+      </div>
+
+      <!-- No Data State -->
+      <div id="noDataState" class="hidden text-center py-8">
+        <p class="text-gray-500">No submissions found.</p>
+      </div>
+
+      <!-- Data Table -->
+      <div id="dataTable" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Name
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Email
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Description
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Submitted At
+              </th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
+            <!-- Data will be populated here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div class="bg-blue-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-blue-800">Total Submissions</h3>
+          <p id="totalCount" class="text-2xl font-bold text-blue-600">0</p>
+        </div>
+        <div class="bg-green-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-green-800">
+            Today's Submissions
+          </h3>
+          <p id="todayCount" class="text-2xl font-bold text-green-600">0</p>
+        </div>
+        <div class="bg-purple-50 p-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-purple-800">Unique Users</h3>
+          <p id="uniqueUsers" class="text-2xl font-bold text-purple-600">0</p>
+        </div>
+      </div>
+    </div>
+
     <script>
+      // Form submission
       document
         .getElementById("studentForm")
         .addEventListener("submit", function (e) {
@@ -91,15 +170,113 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Success:", data);
               alert("Submission successful!");
               this.reset();
+              // Refresh the data visualization
+              loadData();
             })
             .catch((error) => {
               console.error("Error:", error);
               alert("An error occurred. Please try again.");
             });
         });
+
+      // Data visualization functions
+      function showLoading() {
+        document.getElementById("loadingState").classList.remove("hidden");
+        document.getElementById("noDataState").classList.add("hidden");
+        document.getElementById("dataTable").classList.add("hidden");
+      }
+
+      function hideLoading() {
+        document.getElementById("loadingState").classList.add("hidden");
+      }
+
+      function showNoData() {
+        document.getElementById("noDataState").classList.remove("hidden");
+        document.getElementById("dataTable").classList.add("hidden");
+      }
+
+      function showData() {
+        document.getElementById("noDataState").classList.add("hidden");
+        document.getElementById("dataTable").classList.remove("hidden");
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) return "N/A";
+        return new Date(dateString).toLocaleString();
+      }
+
+      function calculateStats(data) {
+        const total = data.length;
+        const today = new Date().toDateString();
+        const todaySubmissions = data.filter((item) => {
+          if (!item.createdAt) return false;
+          return new Date(item.createdAt).toDateString() === today;
+        }).length;
+        const uniqueEmails = new Set(data.map((item) => item.email)).size;
+
+        document.getElementById("totalCount").textContent = total;
+        document.getElementById("todayCount").textContent = todaySubmissions;
+        document.getElementById("uniqueUsers").textContent = uniqueEmails;
+      }
+
+      function populateTable(data) {
+        const tableBody = document.getElementById("dataTableBody");
+        tableBody.innerHTML = "";
+
+        data.forEach((item) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              ${item.name || "N/A"}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${item.email || "N/A"}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+              ${item.description || "N/A"}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              ${formatDate(item.created_at)}
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+
+      function loadData() {
+        showLoading();
+
+        fetch("http://localhost:3000/alldata")
+          .then((response) => response.json())
+          .then((data) => {
+            hideLoading();
+
+            if (data.data && data.data.length > 0) {
+              populateTable(data.data);
+              calculateStats(data.data);
+              showData();
+            } else {
+              showNoData();
+              calculateStats([]);
+            }
+          })
+          .catch((error) => {
+            hideLoading();
+            console.error("Error fetching data:", error);
+            showNoData();
+            calculateStats([]);
+          });
+      }
+
+      // Refresh button
+      document
+        .getElementById("refreshData")
+        .addEventListener("click", loadData);
+
+      // Load data on page load
+      document.addEventListener("DOMContentLoaded", loadData);
     </script>
   </body>
 </html>
