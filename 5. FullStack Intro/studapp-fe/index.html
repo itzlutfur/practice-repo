@@ -3,160 +3,434 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Submission Form</title>
+    <title>Student Submission Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3B82F6",
+              secondary: "#1E40AF",
+              accent: "#06B6D4",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+      body {
+        font-family: "Inter", sans-serif;
+      }
+
+      .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .hover-scale {
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .hover-scale:hover {
+        transform: scale(1.02);
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.6s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .custom-shadow {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
+    </style>
   </head>
-  <body class="bg-gray-100 min-h-screen py-8">
-    <!-- Submission Form -->
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 mb-8">
-      <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-        Student Submission
-      </h1>
+  <body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="text-white py-8">
+      <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-2">
+          Student Submission Portal
+        </h1>
+        <p class="text-xl text-center opacity-90">
+          Submit your work and track all submissions
+        </p>
+      </div>
+    </header>
 
-      <form id="studentForm" class="space-y-4">
-        <div>
-          <label
-            for="name"
-            class="block text-sm font-medium text-gray-700 mb-2"
+    <div class="max-w-7xl mx-auto px-4 pb-8">
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Submission Form -->
+        <div class="animate-fade-in">
+          <div
+            class="bg-white/95 backdrop-blur-sm rounded-2xl custom-shadow p-8 hover-scale"
           >
-            Name <span class="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your full name"
-          />
+            <div class="flex items-center mb-6">
+              <div
+                class="w-3 h-8 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full mr-4"
+              ></div>
+              <h2 class="text-2xl font-bold text-gray-800">New Submission</h2>
+            </div>
+
+            <form id="studentForm" class="space-y-6">
+              <div class="space-y-2">
+                <label
+                  for="name"
+                  class="block text-sm font-semibold text-gray-700"
+                >
+                  Full Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="email"
+                  class="block text-sm font-semibold text-gray-700"
+                >
+                  Email Address <span class="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                  placeholder="Enter your email address"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="description"
+                  class="block text-sm font-semibold text-gray-700"
+                >
+                  Description <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  required
+                  rows="4"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 resize-vertical"
+                  placeholder="Describe your submission in detail..."
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                id="submitBtn"
+                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200 transform hover:scale-105"
+              >
+                <span id="submitText">Submit Assignment</span>
+                <span id="submitLoader" class="hidden">
+                  <svg
+                    class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Submitting...
+                </span>
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div>
-          <label
-            for="email"
-            class="block text-sm font-medium text-gray-700 mb-2"
+        <!-- Quick Stats -->
+        <div class="animate-fade-in lg:delay-150">
+          <div
+            class="bg-white/95 backdrop-blur-sm rounded-2xl custom-shadow p-8 hover-scale"
           >
-            Email <span class="text-red-500">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your email address"
-          />
-        </div>
+            <div class="flex items-center mb-6">
+              <div
+                class="w-3 h-8 bg-gradient-to-b from-green-500 to-teal-600 rounded-full mr-4"
+              ></div>
+              <h2 class="text-2xl font-bold text-gray-800">Quick Stats</h2>
+            </div>
 
-        <div>
-          <label
-            for="description"
-            class="block text-sm font-medium text-gray-700 mb-2"
+            <div class="grid grid-cols-1 gap-4">
+              <div
+                class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold text-blue-800 mb-1">
+                      Total Submissions
+                    </h3>
+                    <p id="totalCount" class="text-3xl font-bold text-blue-600">
+                      0
+                    </p>
+                  </div>
+                  <div class="text-blue-500">
+                    <svg
+                      class="w-8 h-8"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-100"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold text-green-800 mb-1">
+                      Today's Submissions
+                    </h3>
+                    <p
+                      id="todayCount"
+                      class="text-3xl font-bold text-green-600"
+                    >
+                      0
+                    </p>
+                  </div>
+                  <div class="text-green-500">
+                    <svg
+                      class="w-8 h-8"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-100"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-lg font-semibold text-purple-800 mb-1">
+                      Unique Users
+                    </h3>
+                    <p
+                      id="uniqueUsers"
+                      class="text-3xl font-bold text-purple-600"
+                    >
+                      0
+                    </p>
+                  </div>
+                  <div class="text-purple-500">
+                    <svg
+                      class="w-8 h-8"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Visualization Section -->
+      <div class="mt-8 animate-fade-in lg:delay-300">
+        <div class="bg-white/95 backdrop-blur-sm rounded-2xl custom-shadow p-8">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
           >
-            Description <span class="text-red-500">*</span>
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            required
-            rows="4"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
-            placeholder="Describe your submission..."
-          ></textarea>
-        </div>
+            <div class="flex items-center">
+              <div
+                class="w-3 h-8 bg-gradient-to-b from-orange-500 to-red-600 rounded-full mr-4"
+              ></div>
+              <h2 class="text-2xl font-bold text-gray-800">All Submissions</h2>
+            </div>
+            <button
+              id="refreshData"
+              class="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-green-700 hover:to-teal-700 focus:outline-none focus:ring-4 focus:ring-green-300 transition-all duration-200 transform hover:scale-105"
+            >
+              <svg
+                class="w-5 h-5 inline mr-2"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Refresh Data
+            </button>
+          </div>
 
-        <button
-          type="submit"
-          class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
-        >
-          Submit
-        </button>
-      </form>
+          <!-- Loading State -->
+          <div id="loadingState" class="hidden text-center py-12">
+            <div
+              class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"
+            ></div>
+            <p class="mt-4 text-gray-600 font-medium">Loading submissions...</p>
+          </div>
+
+          <!-- No Data State -->
+          <div id="noDataState" class="hidden text-center py-12">
+            <div class="text-gray-400 mb-4">
+              <svg
+                class="w-16 h-16 mx-auto"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm0 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">
+              No submissions yet
+            </h3>
+            <p class="text-gray-500">Be the first to submit your assignment!</p>
+          </div>
+
+          <!-- Data Table -->
+          <div
+            id="dataTable"
+            class="overflow-hidden rounded-xl border border-gray-200"
+          >
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                  <tr>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider"
+                    >
+                      Student
+                    </th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider"
+                    >
+                      Email
+                    </th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider"
+                    >
+                      Description
+                    </th>
+                    <th
+                      class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider"
+                    >
+                      Submitted
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="dataTableBody"
+                  class="bg-white divide-y divide-gray-200"
+                >
+                  <!-- Data will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Data Visualization Section -->
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Submitted Data</h2>
-        <button
-          id="refreshData"
-          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
-        >
-          Refresh Data
-        </button>
-      </div>
-
-      <!-- Loading State -->
-      <div id="loadingState" class="hidden text-center py-8">
-        <div
-          class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
-        ></div>
-        <p class="mt-2 text-gray-600">Loading data...</p>
-      </div>
-
-      <!-- No Data State -->
-      <div id="noDataState" class="hidden text-center py-8">
-        <p class="text-gray-500">No submissions found.</p>
-      </div>
-
-      <!-- Data Table -->
-      <div id="dataTable" class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Name
-              </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Email
-              </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Description
-              </th>
-              <th
-                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Submitted At
-              </th>
-            </tr>
-          </thead>
-          <tbody id="dataTableBody" class="bg-white divide-y divide-gray-200">
-            <!-- Data will be populated here -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Statistics Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <div class="bg-blue-50 p-4 rounded-lg">
-          <h3 class="text-lg font-semibold text-blue-800">Total Submissions</h3>
-          <p id="totalCount" class="text-2xl font-bold text-blue-600">0</p>
-        </div>
-        <div class="bg-green-50 p-4 rounded-lg">
-          <h3 class="text-lg font-semibold text-green-800">
-            Today's Submissions
-          </h3>
-          <p id="todayCount" class="text-2xl font-bold text-green-600">0</p>
-        </div>
-        <div class="bg-purple-50 p-4 rounded-lg">
-          <h3 class="text-lg font-semibold text-purple-800">Unique Users</h3>
-          <p id="uniqueUsers" class="text-2xl font-bold text-purple-600">0</p>
-        </div>
+    <!-- Success Notification -->
+    <div
+      id="successNotification"
+      class="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50"
+    >
+      <div class="flex items-center">
+        <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span>Submission successful!</span>
       </div>
     </div>
 
     <script>
+      // Utility functions
+      function showNotification() {
+        const notification = document.getElementById("successNotification");
+        notification.classList.remove("translate-x-full");
+        setTimeout(() => {
+          notification.classList.add("translate-x-full");
+        }, 3000);
+      }
+
+      function setSubmitLoading(loading) {
+        const btn = document.getElementById("submitBtn");
+        const text = document.getElementById("submitText");
+        const loader = document.getElementById("submitLoader");
+
+        if (loading) {
+          btn.disabled = true;
+          text.classList.add("hidden");
+          loader.classList.remove("hidden");
+        } else {
+          btn.disabled = false;
+          text.classList.remove("hidden");
+          loader.classList.add("hidden");
+        }
+      }
+
       // Form submission
       document
         .getElementById("studentForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
+          setSubmitLoading(true);
 
           const formData = new FormData(this);
           const data = Object.fromEntries(formData);
@@ -170,14 +444,16 @@
           })
             .then((response) => response.json())
             .then((data) => {
-              alert("Submission successful!");
+              showNotification();
               this.reset();
-              // Refresh the data visualization
               loadData();
             })
             .catch((error) => {
               console.error("Error:", error);
               alert("An error occurred. Please try again.");
+            })
+            .finally(() => {
+              setSubmitLoading(false);
             });
         });
 
@@ -204,41 +480,85 @@
 
       function formatDate(dateString) {
         if (!dateString) return "N/A";
-        return new Date(dateString).toLocaleString();
+        return new Date(dateString).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
       }
 
       function calculateStats(data) {
         const total = data.length;
         const today = new Date().toDateString();
         const todaySubmissions = data.filter((item) => {
-          if (!item.createdAt) return false;
-          return new Date(item.createdAt).toDateString() === today;
+          if (!item.created_at) return false;
+          return new Date(item.created_at).toDateString() === today;
         }).length;
         const uniqueEmails = new Set(data.map((item) => item.email)).size;
 
-        document.getElementById("totalCount").textContent = total;
-        document.getElementById("todayCount").textContent = todaySubmissions;
-        document.getElementById("uniqueUsers").textContent = uniqueEmails;
+        // Animate numbers
+        animateNumber("totalCount", total);
+        animateNumber("todayCount", todaySubmissions);
+        animateNumber("uniqueUsers", uniqueEmails);
+      }
+
+      function animateNumber(elementId, finalValue) {
+        const element = document.getElementById(elementId);
+        const startValue = parseInt(element.textContent) || 0;
+        const duration = 500;
+        const increment = (finalValue - startValue) / (duration / 16);
+        let currentValue = startValue;
+
+        const timer = setInterval(() => {
+          currentValue += increment;
+          if (
+            (increment > 0 && currentValue >= finalValue) ||
+            (increment < 0 && currentValue <= finalValue)
+          ) {
+            currentValue = finalValue;
+            clearInterval(timer);
+          }
+          element.textContent = Math.round(currentValue);
+        }, 16);
       }
 
       function populateTable(data) {
         const tableBody = document.getElementById("dataTableBody");
         tableBody.innerHTML = "";
 
-        data.forEach((item) => {
+        data.forEach((item, index) => {
           const row = document.createElement("tr");
+          row.className = "hover:bg-gray-50 transition-colors duration-150";
+          row.style.animationDelay = `${index * 50}ms`;
+          row.classList.add("animate-fade-in");
+
           row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              ${item.name || "N/A"}
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                  ${(item.name || "N").charAt(0).toUpperCase()}
+                </div>
+                <div class="text-sm font-semibold text-gray-900">${
+                  item.name || "N/A"
+                }</div>
+              </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              ${item.email || "N/A"}
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-600">${item.email || "N/A"}</div>
             </td>
-            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-              ${item.description || "N/A"}
+            <td class="px-6 py-4">
+              <div class="text-sm text-gray-600 max-w-xs">
+                <div class="truncate" title="${item.description || "N/A"}">
+                  ${item.description || "N/A"}
+                </div>
+              </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              ${formatDate(item.created_at)}
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">${formatDate(
+                item.created_at
+              )}</div>
             </td>
           `;
           tableBody.appendChild(row);
