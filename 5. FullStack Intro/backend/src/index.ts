@@ -1,5 +1,10 @@
 import cors from "cors";
 import express, { Request, Response } from "express";
+import {
+  connectToPostgres,
+  executeQuery,
+  testDatabaseConnection,
+} from "./utils/database";
 const app = express();
 const port = 3000;
 
@@ -18,14 +23,26 @@ app.get("/", (req: Request, res: Response) => {
 
 app.post("/data", (req: Request, res: Response) => {
   const { name, email, description } = req.body;
-  
+  executeQuery(
+    "INSERT INTO student (name, email, description) VALUES ($1, $2, $3)",
+    [name, email, description]
+  );
   res.status(200).json({
     message: `${name}`,
     email: `${email}`,
     description: `${description}`,
+    status: "Success"
   });
 });
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
+
+  try {
+    connectToPostgres();
+    testDatabaseConnection();
+  } catch (error) {
+    console.error("Error connecting to PostgreSQL database:", error);
+    throw error;
+  }
 });
