@@ -31,8 +31,18 @@ app.post("/data", (req: Request, res: Response) => {
     message: `${name}`,
     email: `${email}`,
     description: `${description}`,
-    status: "Success"
+    status: "Success",
   });
+});
+
+app.get("/alldata", async(req: Request, res: Response) => {
+  try {
+    const alldata = await executeQuery("SELECT * FROM student");
+    
+    res.json({ data: alldata.rows, status: "Success" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.listen(port, () => {
